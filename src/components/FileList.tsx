@@ -35,29 +35,30 @@ export const FileList = ({ onDownloadClick }: FileListProps) => {
   return (
     <div className="min-h-screen bg-sharepoint-gray">
       {/* Header */}
-      <div className="bg-sharepoint-blue text-white px-6 py-4">
-        <div className="flex items-center space-x-4">
+      <div className="bg-sharepoint-blue text-white px-4 md:px-6 py-4">
+        <div className="flex items-center space-x-2 md:space-x-4">
           <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-white/20 rounded-sm flex items-center justify-center">
-              <div className="w-3 h-3 bg-white rounded-sm"></div>
+            <div className="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-sm flex items-center justify-center">
+              <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-white rounded-sm"></div>
             </div>
-            <span className="text-sm font-medium">Microsoft</span>
-            <span className="text-white/80">|</span>
-            <span className="text-sm font-medium">SharePoint</span>
+            <span className="text-xs md:text-sm font-medium">Microsoft</span>
+            <span className="text-white/80 hidden sm:inline">|</span>
+            <span className="text-xs md:text-sm font-medium hidden sm:inline">SharePoint</span>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex justify-between items-start">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-8">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start space-y-6 lg:space-y-0">
           <div className="flex-1">
-            <h1 className="text-2xl font-semibold text-sharepoint-text mb-2">Files</h1>
-            <p className="text-sharepoint-text/70 mb-8">All Files Are Ready To Download</p>
+            <h1 className="text-xl md:text-2xl font-semibold text-sharepoint-text mb-2">Files</h1>
+            <p className="text-sharepoint-text/70 mb-6 md:mb-8">All Files Are Ready To Download</p>
 
             {/* Files Table */}
             <div className="bg-white rounded-lg shadow-file-card overflow-hidden">
-              <div className="px-6 py-4 border-b border-sharepoint-border">
+              {/* Desktop Table Header */}
+              <div className="hidden md:block px-4 md:px-6 py-4 border-b border-sharepoint-border">
                 <div className="grid grid-cols-12 gap-4 text-sm font-medium text-sharepoint-text">
                   <div className="col-span-6">Name</div>
                   <div className="col-span-3">Size</div>
@@ -67,21 +68,39 @@ export const FileList = ({ onDownloadClick }: FileListProps) => {
 
               <div className="divide-y divide-sharepoint-border">
                 {files.map((file) => (
-                  <div key={file.id} className="px-6 py-4 hover:bg-sharepoint-gray/50 transition-colors">
-                    <div className="grid grid-cols-12 gap-4 items-center">
+                  <div key={file.id} className="px-4 md:px-6 py-4 hover:bg-sharepoint-gray/50 transition-colors">
+                    {/* Desktop Layout */}
+                    <div className="hidden md:grid grid-cols-12 gap-4 items-center">
                       <div className="col-span-6 flex items-center space-x-3">
                         {getFileIcon(file.type)}
-                        <span className="text-sharepoint-text">{file.name}</span>
+                        <span className="text-sharepoint-text text-sm">{file.name}</span>
                       </div>
-                      <div className="col-span-3 text-sharepoint-text/70">{file.size}</div>
+                      <div className="col-span-3 text-sharepoint-text/70 text-sm">{file.size}</div>
                       <div className="col-span-3">
                         <Button
                           onClick={onDownloadClick}
-                          className="bg-sharepoint-blue hover:bg-sharepoint-header text-white px-4 py-2 rounded"
+                          className="bg-sharepoint-blue hover:bg-sharepoint-header text-white px-4 py-2 rounded text-sm"
                         >
                           Download
                         </Button>
                       </div>
+                    </div>
+
+                    {/* Mobile Layout */}
+                    <div className="md:hidden space-y-3">
+                      <div className="flex items-start space-x-3">
+                        {getFileIcon(file.type)}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sharepoint-text font-medium text-sm leading-tight">{file.name}</h3>
+                          <p className="text-sharepoint-text/70 text-xs mt-1">{file.size}</p>
+                        </div>
+                      </div>
+                      <Button
+                        onClick={onDownloadClick}
+                        className="w-full bg-sharepoint-blue hover:bg-sharepoint-header text-white py-2.5 rounded text-sm"
+                      >
+                        Download
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -89,8 +108,8 @@ export const FileList = ({ onDownloadClick }: FileListProps) => {
             </div>
           </div>
 
-          {/* SharePoint Logo */}
-          <div className="ml-8 flex-shrink-0">
+          {/* SharePoint Logo - Hidden on mobile, shown on desktop */}
+          <div className="hidden lg:block lg:ml-8 flex-shrink-0">
             <div className="w-80 h-60 bg-gradient-to-br from-sharepoint-blue to-sharepoint-header rounded-lg flex items-center justify-center relative overflow-hidden">
               <div className="text-white text-4xl font-bold">SharePoint</div>
               <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-white/10 rounded-full"></div>
