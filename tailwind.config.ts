@@ -61,6 +61,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				sharepoint: {
+					blue: 'hsl(var(--sharepoint-blue))',
+					'light-blue': 'hsl(var(--sharepoint-light-blue))',
+					header: 'hsl(var(--sharepoint-header))',
+					gray: 'hsl(var(--sharepoint-gray))',
+					text: 'hsl(var(--sharepoint-text))',
+					border: 'hsl(var(--sharepoint-border))'
 				}
 			},
 			borderRadius: {
@@ -84,11 +92,20 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'progress': {
+					'0%': { width: '0%' },
+					'100%': { width: '100%' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'progress': 'progress 3s ease-in-out forwards'
+			},
+			boxShadow: {
+				'file-card': 'var(--shadow-file-card)',
+				'modal': 'var(--shadow-modal)'
 			}
 		}
 	},

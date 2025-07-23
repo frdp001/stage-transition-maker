@@ -1,13 +1,33 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { LoadingStage } from "@/components/LoadingStage";
+import { FileList } from "@/components/FileList";
+import { AuthModal } from "@/components/AuthModal";
 
 const Index = () => {
+  const [stage, setStage] = useState<'loading' | 'files' | 'auth'>('loading');
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleLoadingComplete = () => {
+    setStage('files');
+  };
+
+  const handleDownloadClick = () => {
+    setShowAuthModal(true);
+  };
+
+  const handleCloseAuth = () => {
+    setShowAuthModal(false);
+  };
+
+  if (stage === 'loading') {
+    return <LoadingStage onComplete={handleLoadingComplete} />;
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      <FileList onDownloadClick={handleDownloadClick} />
+      <AuthModal isOpen={showAuthModal} onClose={handleCloseAuth} />
+    </>
   );
 };
 
