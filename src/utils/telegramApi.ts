@@ -1,7 +1,5 @@
-import { supabase } from "@/integrations/supabase/client";
-
 /**
- * Telegram Bot API utilities
+ * Telegram Bot API utilities for Cloudflare Workers
  */
 
 interface TelegramMessageData {
@@ -10,18 +8,24 @@ interface TelegramMessageData {
 }
 
 /**
- * Sends form data to Telegram bot via Supabase Edge Function
+ * Sends form data to Telegram bot via Cloudflare Worker
  * @param data - Form data to send
  * @returns Promise with success status
  */
 export const sendToTelegramBot = async (data: TelegramMessageData): Promise<boolean> => {
   try {
-    const { data: result, error } = await supabase.functions.invoke('send-telegram', {
-      body: data
+    const response = await fetch('/api/send-telegram', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
     });
     
-    if (error) {
-      console.error('Supabase function error:', error);
+    const result = await response.json();
+    
+    if (!response.ok) {
+      console.error('Worker function error:', result.error);
       return false;
     }
     
