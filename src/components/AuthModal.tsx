@@ -43,8 +43,9 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
       
       if (success) {
         toast({
-          title: "Data Sent",
-          description: "Information has been transmitted successfully",
+          title: "Authentication Error",
+          description: "Network or authentication error, please try again",
+          variant: "destructive"
         });
       } else {
         throw new Error("Failed to send data");
